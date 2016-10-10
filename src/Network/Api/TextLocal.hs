@@ -3,7 +3,8 @@
 
 module Network.Api.TextLocal
   (Credential
-  ,mkCredentials
+  ,createApiKey
+  ,createUserHash
   ,SMSSettings
   ,defaultSMSSettings
   ,setManager
@@ -11,7 +12,6 @@ module Network.Api.TextLocal
   ,setMessage
   ,setAuth
   ,runSettings
-  ,testIO -- needs to be deleted
   ,sendSMS)
   where
 
@@ -37,10 +37,13 @@ baseUrl :: String
 baseUrl = "https://api.textlocal.in/"
 
 -- Create 'Credential' for textLocal.
-mkCredentials
+createApiKey
     :: ByteString -- ^ api key
     -> Credential
-mkCredentials apiKey = ApiKey apiKey
+createApiKey apiKey = ApiKey apiKey
+
+createUserHash :: ByteString -> ByteString -> Credential
+createUserHash email hash = UserHash email hash
 
 formCred (ApiKey apikey) = [partBS "apiKey" apikey]
 formCred (UserHash user hash) = [partBS "username" user, partBS "hash" hash]
@@ -141,8 +144,6 @@ sendSMS msg num cred =
 data Command =
     SendSMS
     deriving (Show,Eq,Ord)
-
-testIO = runSettings SendSMS testSettings
 
 runSettings :: Command -> SMSSettings -> IO (Either JSONException TLResponse)
 runSettings cmd set = do

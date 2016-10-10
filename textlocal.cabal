@@ -2,7 +2,7 @@ name:                textlocal
 version:             0.1.0.0
 synopsis:            Haskell wrapper for textlocal SMS gateway
 description:         Please see README.md
-homepage:            https://github.com/githubuser/textlocal#readme
+homepage:            https://github.com/just-chow/textlocal
 license:             BSD3
 license-file:        LICENSE
 author:              Sibi Prabakaran
@@ -10,6 +10,7 @@ maintainer:          sibi@psibi.in
 copyright:           2016 Sibi Prabakaran
 category:            Web
 build-type:          Simple
+bug-reports:         https://github.com/just-chow/textlocal/issues
 -- extra-source-files:
 cabal-version:       >=1.10
 

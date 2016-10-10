@@ -8,6 +8,7 @@ Haskell wrapper for sending SMS using textlocal SMS gateway.
 2. Quick way to send:
 
 ``` haskell
+import Network.Api.TextLocal
 let cred = createUserHash "myemail@email.in" "my-secret-hash"
 res <- sendSMS "hello world" ["911234567890"] cred
 res
@@ -17,6 +18,7 @@ Right (TLResponse {status = Success, warnings = Nothing, errors = Nothing})
 Or in a more configurable way:
 
 ``` haskell
+import Network.Api.TextLocal
 let mySettings = setTest True defaultSettings
 res <- runSettings SendSMS mySettings
 res

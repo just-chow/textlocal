@@ -167,9 +167,6 @@ boolByteString Nothing = "false"
 boolByteString (Just False) = "false"
 boolByteString (Just True) = "true"
 
-credentialByteString :: Credential -> ByteString
-credentialByteString (ApiKey bytes) = bytes
-
 getManager :: Maybe Manager -> IO Manager
 getManager Nothing = newManager tlsManagerSettings
 getManager (Just mgr) = return mgr

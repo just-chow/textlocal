@@ -18,7 +18,7 @@ library
   hs-source-dirs:      src
   exposed-modules:     Network.Api.Types,
                        Network.Api.TextLocal
-  build-depends:       base >= 4.7 && < 4.9,
+  build-depends:       base >= 4.6 && < 5,
                        text, 
                        bytestring,
                        unix-time,

@@ -1,5 +1,7 @@
 # textlocal
 
+[![Build Status](https://travis-ci.org/just-chow/textlocal.svg?branch=master)](https://travis-ci.org/just-chow/textlocal)
+
 Haskell wrapper for sending SMS using textlocal SMS gateway.
 
 ## Sending SMS

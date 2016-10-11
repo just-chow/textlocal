@@ -4,7 +4,8 @@ module Network.Api.Types where
 
 import Data.Text (Text)
 import Data.Aeson ((.:), Value(..), FromJSON(..), (.:?))
-import Control.Applicative (empty)
+import Control.Applicative (empty, (<*>))
+import Data.Functor ((<$>))
 
 data Error = Error
     { ecode :: Int

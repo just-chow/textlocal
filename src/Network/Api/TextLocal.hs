@@ -30,15 +30,15 @@ import Network.Api.Types
 -- Credential for making request to textLocal server.
 data Credential
     = ApiKey ByteString
-    | UserHash ByteString -- ^ Email address
-               ByteString -- ^ Secure hash that is found within the messenger.
+    | UserHash ByteString -- Email address
+               ByteString -- Secure hash that is found within the messenger.
 
 baseUrl :: String
 baseUrl = "https://api.textlocal.in/"
 
--- Create 'Credential' for textLocal.
+-- | Create 'Credential' for textLocal.
 createApiKey
-    :: ByteString -- ^ api key
+    :: ByteString -- Api key
     -> Credential
 createApiKey apiKey = ApiKey apiKey
 
@@ -49,12 +49,12 @@ formCred (ApiKey apikey) = [partBS "apiKey" apikey]
 formCred (UserHash user hash) = [partBS "username" user, partBS "hash" hash]
 
 data SMSSettings = SMSSettings
-    { settingsSender :: ByteString -- ^ Sender name must be 6 alpha
+    { settingsSender :: ByteString -- Sender name must be 6 alpha
                                    -- characters and should be
                                    -- pre-approved by Textlocal. In
                                    -- the absence of approved sender
                                    -- names, use the default 'TXTLCL'
-    , settingsMessage :: ByteString -- ^ The message content. This
+    , settingsMessage :: ByteString -- The message content. This
                                     -- parameter should be no longer
                                     -- than 766 characters. The
                                     -- message also must be URL

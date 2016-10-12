@@ -1,5 +1,5 @@
 name:                textlocal
-version:             0.1.0.2
+version:             0.1.0.3
 synopsis:            Haskell wrapper for textlocal SMS gateway
 description:         Please see README.md
 homepage:            https://github.com/just-chow/textlocal

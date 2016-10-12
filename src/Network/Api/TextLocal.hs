@@ -1,18 +1,55 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
+-- | Haskell wrapper for sending SMS using textlocal SMS gateway.
+--
+-- Sending SMS
+--
+-- 1. Get an api key from <http://textlocal.in textlocal.in>
+-- 2. Quick way to send:
+--
+-- @
+-- >> import Network.Api.TextLocal
+-- >> let cred = createUserHash "myemail@email.in" "my-secret-hash"
+-- >> res <- sendSMS "hello world" ["911234567890"] cred
+-- >> res
+-- Right (TLResponse {status = Success, warnings = Nothing, errors = Nothing})
+-- @
+--
+-- Or in a more configurable way:
+--
+-- @
+-- >> import Network.Api.TextLocal
+-- >> let cred = createUserHash "myemail@email.in" "my-secret-hash"
+-- >> let destNums = ["911234567890"]
+-- >> let mySettings = setDestinationNumber destNums $  setAuth cred $ setTest True defaultSMSSettings
+-- >> res <- runSettings SendSMS (setMessage "hello world" mySettings)
+-- >> res
+-- Right (TLResponse {status = Success, warnings = Nothing, errors = Nothing})
+-- @
+--
 module Network.Api.TextLocal
-  (Credential
+  (
+   -- * Credential
+   Credential
   ,createApiKey
   ,createUserHash
-  ,SMSSettings
+  ,
+   -- * Settings
+   SMSSettings
   ,defaultSMSSettings
-  ,setManager
+  ,
+   -- ** Setters
+   setManager
   ,setDestinationNumber
   ,setMessage
   ,setAuth
-  ,runSettings
-  ,sendSMS)
+  ,setTest
+  ,
+   -- * Send SMS
+   runSettings
+  ,sendSMS
+  ,Command(..))
   where
 
 import Data.Text (Text)
@@ -26,8 +63,9 @@ import Network.HTTP.Client.MultipartFormData (formDataBody, partBS)
 import Data.Monoid ((<>))
 import Network.Api.Types
 
--- |
--- Credential for making request to textLocal server.
+-- | Credential for making request to textLocal server. There are
+-- multiple ways for creating it. You can either use 'createApiKey' or
+-- 'createUserHash' to create this type.
 data Credential
     = ApiKey ByteString
     | UserHash ByteString -- Email address
@@ -36,13 +74,17 @@ data Credential
 baseUrl :: String
 baseUrl = "https://api.textlocal.in/"
 
--- | Create 'Credential' for textLocal.
+-- | Create 'Credential' for textLocal using api key.
 createApiKey
-    :: ByteString -- Api key
+    :: ByteString -- ^ Api key
     -> Credential
 createApiKey apiKey = ApiKey apiKey
 
-createUserHash :: ByteString -> ByteString -> Credential
+-- | Create 'Credential' for textLocal using email and secure hash.
+createUserHash
+    :: ByteString -- ^ Email address
+    -> ByteString -- ^ Secure hash that is found within the messenger.
+    -> Credential
 createUserHash email hash = UserHash email hash
 
 formCred (ApiKey apikey) = [partBS "apiKey" apikey]
@@ -74,10 +116,10 @@ data SMSSettings = SMSSettings
     }
 
 -- | 'defaultSMSSettings' has the default settings, duh! The
--- 'settingsSender' has a value of "TXTLCL". The accessors
--- 'settingsMessage', 'settingsAuth', 'settingsNumber' contains a
--- value of bottom. They have to be initialized to a proper value
--- before sending SMS.
+-- 'settingsSender' has a value of 'TXTLCL'. Using the accessors
+-- 'setMessage', 'setAuth', 'setDestinationNumber' you should properly
+-- initialize their respective values. By default, these fields contain a
+-- value of bottom.
 defaultSMSSettings =
     SMSSettings
     { settingsSender = "TXTLCL"
@@ -121,7 +163,10 @@ setManager mgr def =
     { settingsManager = Just mgr
     }
 
-setTest :: Bool -> SMSSettings -> SMSSettings
+-- | Set this field to true to enable test mode, no messages will be
+-- sent and your credit balance will be unaffected. It defaults to false.
+setTest
+    :: Bool -> SMSSettings -> SMSSettings
 setTest test set =
     set
     { settingsTest = Just test

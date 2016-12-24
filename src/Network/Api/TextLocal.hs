@@ -45,9 +45,9 @@ module Network.Api.TextLocal
   ,setMessage
   ,setAuth
   ,setTest
-  ,
+  ,setSender   
    -- * Send SMS
-   runSettings
+  ,runSettings
   ,sendSMS
   ,Command(..))
   where

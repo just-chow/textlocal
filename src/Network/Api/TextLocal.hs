@@ -137,6 +137,9 @@ defaultSMSSettings =
     , settingsTest = Just False
     }
 
+setSender :: ByteString -> SMSSettings -> SMSSettings
+setSender msg def = def { settingsSender = msg }
+
 setMessage :: ByteString -> SMSSettings -> SMSSettings
 setMessage msg def =
     def
